@@ -1,11 +1,8 @@
-FROM tomcat:11.0.4-jdk21
+FROM tomcat:11.0-jdk21
 
-# Copy WAR file as ROOT
+# Copy your WAR file into Tomcat webapps folder
 COPY ROOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Render gives the container port via $PORT, so update Tomcat config dynamically
-RUN sed -i 's/port="8080"/port="${PORT}"/' /usr/local/tomcat/conf/server.xml
-
-EXPOSE 8080
-
-CMD ["catalina.sh", "run"]
+# Remove the default connector line and inject dynamic port on startup
+CMD sed -i "s/port=\"8080\"/port=\"${PORT:-8080}\"/" /usr/local/tomcat/conf/server.xml && \
+    catalina.sh run
