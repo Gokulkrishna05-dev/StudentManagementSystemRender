@@ -1,5 +1,4 @@
-FROM tomcat:11-jdk21
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
+FROM tomcat:9-jdk17
 COPY MainProject.war /usr/local/tomcat/webapps/ROOT.war
-EXPOSE 8080
+RUN sed -i 's/port="8080"/port="${PORT}"/' /usr/local/tomcat/conf/server.xml
 CMD ["catalina.sh", "run"]
