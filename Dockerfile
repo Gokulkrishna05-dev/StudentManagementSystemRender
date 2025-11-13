@@ -1,11 +1,11 @@
-# Use Tomcat 11 with JDK 21
 FROM tomcat:11.0.4-jdk21
 
-# Copy your WAR file (rename to ROOT.war for simplicity)
+# Copy WAR file as ROOT
 COPY ROOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose the default Tomcat port
+# Render gives the container port via $PORT, so update Tomcat config dynamically
+RUN sed -i 's/port="8080"/port="${PORT}"/' /usr/local/tomcat/conf/server.xml
+
 EXPOSE 8080
 
-# Start Tomcat
 CMD ["catalina.sh", "run"]
